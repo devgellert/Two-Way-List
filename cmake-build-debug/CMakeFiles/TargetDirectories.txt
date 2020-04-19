@@ -1,0 +1,3 @@
+/Users/gellertpuskas/Desktop/Egyetem/2_félév/Algoritmusok És Adatszerkezetek/algo_zh_1/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/Users/gellertpuskas/Desktop/Egyetem/2_félév/Algoritmusok És Adatszerkezetek/algo_zh_1/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/gellertpuskas/Desktop/Egyetem/2_félév/Algoritmusok És Adatszerkezetek/algo_zh_1/cmake-build-debug/CMakeFiles/algo_zh_1.dir

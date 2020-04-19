@@ -1,0 +1,12 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/gellertpuskas/Desktop/Egyetem/2_félév/Algoritmusok És Adatszerkezetek/algo_zh_1/main.cpp
+iostream
+-
+
