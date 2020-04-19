@@ -28,6 +28,13 @@ void precede (Node *q, Node *r) {
     p->next = q;
     r->prev = q;
 }
+void out(Node *q) {
+    Node *p = q->prev;
+    Node *r = q->next;
+    p->next = r;
+    r->prev = p;
+    delete(q);
+}
 
 class C2l {
 public:
@@ -64,6 +71,7 @@ public:
 class C2LH {
 public:
     Node *head;
+    enum Errors { DOESNOTCONTAIN };
     C2LH(): head(new Node()) {}
     void pushBeforeLarger(Data *data) {
         Node *newNode = new Node(data);
@@ -71,6 +79,12 @@ public:
         while( r != this->head && newNode->data->code >= r->data->code ) { r = r->next; }
         precede(newNode, r);
     }
+    int deleteAndGetAmount(Node *q) {
+        int val = q->data->amount;
+        out(q);
+        return val;
+    }
+
 
     void print() {
         Node *p = this->head->next;
@@ -81,16 +95,51 @@ public:
     }
 };
 
+void task(C2LH *L, C2LH *LM) {
+    Node* l = L->head->next;
+    Node* lm = LM->head->next;
+    std::cout << "Event logs:" << std::endl ;
+    while ( l != L->head && lm != LM->head ) {
+        if( l->data->code == lm->data->code ) {
+            lm = lm->next;
+            l = l->next;
+            std::cout << "  " << lm->prev->data->code << " was deleted from LM and " << lm->prev->data->amount << " has added to " << l->prev->data->code << " in L"  << std::endl;
+            l->prev->data->amount += LM->deleteAndGetAmount(lm->prev);
+        }else if(l->data->code > lm->data->code) {
+            try {
+                throw C2LH::DOESNOTCONTAIN;
+            }catch (C2LH::Errors e) {
+                std::cout << "  ERROR: The storage does not contain an item with code " << lm->data->code << std::endl;
+            }
+            lm = lm->next;
+        }else if (l->data->code < lm->data->code) {
+            l = l->next;
+        }
+    }
+    std::cout << std::endl ;
+}
+
 int main() {
-    C2LH *list = new C2LH();
-    list->pushBeforeLarger(new Data(10, 1));
-    list->pushBeforeLarger(new Data(2, 1));
-    list->pushBeforeLarger(new Data(3, 1));
-    list->pushBeforeLarger(new Data(20, 1));
-    list->pushBeforeLarger(new Data(5, 1));
-    list->pushBeforeLarger(new Data(1, 1));
-    list->pushBeforeLarger(new Data(7, 1));
-    list->print();
+    C2LH *L = new C2LH();
+    L->pushBeforeLarger(new Data(5, 1));
+    L->pushBeforeLarger(new Data(7, 2));
+    L->pushBeforeLarger(new Data(9, 3));
+    L->pushBeforeLarger(new Data(25, 4));
+
+    C2LH *LM = new C2LH();
+    LM->pushBeforeLarger(new Data(4, 1));
+    LM->pushBeforeLarger(new Data(5, 2));
+    LM->pushBeforeLarger(new Data(6, 3));
+    LM->pushBeforeLarger(new Data(9, 18));
+    LM->pushBeforeLarger(new Data(25, 3));
+
+    task(L, LM);
+
+    std::cout << "L: " << std::endl;
+    L->print();
+    std::cout << "LM: " << std::endl;
+
+    LM->print();
 
 
     return 0;
