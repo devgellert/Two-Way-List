@@ -13,13 +13,21 @@ public:
     Node *next;
     Node *prev;
     Data *data;
-
+    Node(): next(this), prev(this) {}
     Node(Data *data) {
         this->next = this;
         this->prev = this;
         this->data = data;
     }
 };
+
+void precede (Node *q, Node *r) {
+    Node *p = r->prev;
+    q->prev = p;
+    q->next = r;
+    p->next = q;
+    r->prev = q;
+}
 
 class C2l {
 public:
@@ -36,22 +44,12 @@ public:
         if(p->next == this->head && p->data->code < newNode->data->code ) {
             p = p->next;
         }
-        Node *temp = p->prev;
-        newNode->prev = temp;
-        newNode->next = p;
-        temp->next = newNode;
-        p->prev = newNode;
-        std::cout << this->head->data->code << std::endl;
+        precede(newNode, p);
         if(this->head->prev->data->code < this->head->data->code) {
             this->head = this->head->prev;
         }
 
     }
-    void deleteFirst() {
-
-    }
-
-
     void printList() {
         Node *p = this->head;
         while(p->next != this->head) {
@@ -63,10 +61,36 @@ public:
 
 };
 
-int main() {
-    C2l *L = new C2l(new Data(10, 20));
-    C2l *LM = new C2l(new Data(10, 30));
+class C2LH {
+public:
+    Node *head;
+    C2LH(): head(new Node()) {}
+    void pushBeforeLarger(Data *data) {
+        Node *newNode = new Node(data);
+        Node *r = this->head->next;
+        while( r != this->head && newNode->data->code >= r->data->code ) { r = r->next; }
+        precede(newNode, r);
+    }
 
+    void print() {
+        Node *p = this->head->next;
+        while (p != this->head) {
+            std::cout << "Code: " << p->data->code << " Amount: " << p->data->amount << std::endl;
+            p = p->next;
+        }
+    }
+};
+
+int main() {
+    C2LH *list = new C2LH();
+    list->pushBeforeLarger(new Data(10, 1));
+    list->pushBeforeLarger(new Data(2, 1));
+    list->pushBeforeLarger(new Data(3, 1));
+    list->pushBeforeLarger(new Data(20, 1));
+    list->pushBeforeLarger(new Data(5, 1));
+    list->pushBeforeLarger(new Data(1, 1));
+    list->pushBeforeLarger(new Data(7, 1));
+    list->print();
 
 
     return 0;
